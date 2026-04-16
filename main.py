@@ -4,16 +4,13 @@ import argparse
 import json
 from pathlib import Path
 
-from src.setcover import analyze, solve_approx, solve_exact, visualize
-
-
-def load_setcover_instance(path):
-    with open(path, "r", encoding="utf-8") as handle:
-        payload = json.load(handle)
-
-    universe = set(payload["universe"])
-    subsets = [set(subset) for subset in payload["subsets"]]
-    return universe, subsets
+from people.person2_setcover.setcover import (
+    analyze,
+    load_instance as load_setcover_instance,
+    solve_approx,
+    solve_exact,
+    visualize,
+)
 
 
 def run_setcover(instance_path, make_plot=False, plot_path=None):
@@ -31,23 +28,19 @@ def run_setcover(instance_path, make_plot=False, plot_path=None):
     }
 
     if make_plot:
-        try:
-            visualize(
-                universe,
-                subsets,
-                exact_result["solution"],
-                approx_result["solution"],
-                output_path=plot_path,
-            )
-            result["visualization"] = {
-                "status": "generated",
-                "output": plot_path or "interactive window",
-            }
-        except RuntimeError as exc:
-            result["visualization"] = {
-                "status": "skipped",
-                "reason": str(exc),
-            }
+        output_target = plot_path or "outputs/setcover_visualization.png"
+        Path(output_target).parent.mkdir(parents=True, exist_ok=True)
+        visualize(
+            universe,
+            subsets,
+            exact_result["solution"],
+            approx_result["solution"],
+            output_path=output_target,
+        )
+        result["visualization"] = {
+            "status": "generated",
+            "output": output_target,
+        }
 
     return result
 
@@ -59,7 +52,7 @@ def build_parser():
     setcover_parser = subparsers.add_parser("setcover", help="Run the Set Cover pipeline")
     setcover_parser.add_argument(
         "--input",
-        default="data/setcover/sample.json",
+        default="data/person2_setcover/sample.json",
         help="Path to a JSON Set Cover instance",
     )
     setcover_parser.add_argument(
