@@ -1,168 +1,217 @@
-# 👤 Person 3 — Knapsack Problem (0/1)
+# Person 3 - Knapsack Problem (0/1)
 
-## 🗂️ Your Folder
-```
-src/knapsack/
-├── exact.py
-├── approx.py
-├── analysis.py
-└── visualize.py
-```
-Also contribute to: `main.py` (your section), `data/knapsack/`
+## Your Workspace
 
----
+Your work must stay inside:
 
-## 📌 Your Responsibility
-Implement the **full pipeline** for the 0/1 Knapsack Problem:
-- Exact solution using DP
-- Greedy approximation
-- Analysis (compare both)
-- Visualization (weight vs value graph)
-
----
-
-## 🧩 Problem Recap
-- You have `n` items, each with a **weight** and **value**
-- Knapsack has a **capacity W**
-- **Goal:** Maximize total value without exceeding capacity
-- Each item is either taken (1) or not (0) — no fractions
-
----
-
-## ⚙️ What to Build
-
-### `exact.py` — Exact Knapsack
-**Algorithm: Dynamic Programming (2D table)** ⭐ (Core deliverable)
-- `dp[i][w]` = max value using first `i` items with capacity `w`
-- Time complexity: O(n · W)
-- Space: O(n · W)
-
-**Optional: Backtracking** (brute force for comparison)
-- Try all 2ⁿ subsets
-- Used only for very small inputs
-
-```python
-def solve_exact(weights, values, capacity):
-    # Returns: {"solution": [list of chosen item indices], "cost": int, "time": float}
-    # "cost" here = total value achieved (maximize)
+```text
+people/person3_knapsack/
+├── __init__.py
+├── README.md
+└── knapsack/
+    ├── __init__.py
+    ├── io.py
+    ├── exact.py
+    ├── approx.py
+    ├── analysis.py
+    └── visualize.py
 ```
 
----
+You must also add:
 
-### `approx.py` — Greedy Approximation
-**Algorithm: Greedy by value/weight ratio**
-- Sort items by `value / weight` ratio (descending)
-- Pick items greedily until capacity is full
-- Time complexity: O(n log n)
-- Note: This does NOT always give optimal for 0/1 Knapsack (that's the point!)
-
-```python
-def solve_approx(weights, values, capacity):
-    # Returns: {"solution": [list of chosen item indices], "cost": int, "time": float}
+```text
+data/person3_knapsack/
+└── sample.json
 ```
 
----
+You will update `main.py` only for your own Knapsack controller section.
 
-### `analysis.py` — Compare Results
-- Approximation ratio = `exact_value / greedy_value`
-  (since we're maximizing, ratio > 1 means greedy got less)
-- Record runtime of both
-- Show cases where greedy fails
+## How The Repo Is Connected
 
-```python
-def analyze(exact_result, approx_result):
-    # Returns: {"ratio": float, "exact_time": float, "approx_time": float}
-```
+- `main.py` is the project controller at the root.
+- Each person owns a separate topic folder under `people/`.
+- Every topic should follow the same internal package shape.
+- Each topic should add its own data folder under `data/`.
+- Visualization output should go to `outputs/`.
+- `frontend/` exists only as a placeholder right now and should not be implemented yet.
 
----
+Your job is to build the Knapsack part in the same style already used by Person 2 for Set Cover.
 
-### `visualize.py` — Weight vs Value Graph
-- Bar chart: each item's weight and value
-- Highlight chosen items (exact vs greedy — different colors)
-- Show capacity line on weight chart
+## What You Must Build
 
-```python
-def visualize(weights, values, exact_solution, approx_solution, capacity):
-    # Bar chart comparison
-```
+Create the Knapsack package under `people/person3_knapsack/knapsack/` with these files:
 
----
+### `io.py`
 
-## 📅 Your Day-by-Day Plan
+Load a JSON instance for 0/1 Knapsack.
 
-| Day | Task |
-|-----|------|
-| Apr 7 | Repo setup, agree on input/output format with team |
-| Apr 8–9 | `exact.py` — DP solution (2D table) |
-| Apr 10–11 | `approx.py` — Greedy by ratio |
-| Apr 12 | `analysis.py` — timing + value comparison |
-| Apr 13 | `visualize.py` — weight/value bar chart |
-| Apr 14 | Integration with `main.py`, fix bugs |
-| Apr 15 | Report: Knapsack section + PPT slides |
-| Apr 16 | Final polish, demo recording |
+Recommended input format:
 
----
-
-## 📦 Input Format (agree with team on Day 1)
-```python
-weights  = [2, 3, 4, 5]
-values   = [3, 4, 5, 6]
-capacity = 8
-```
-
----
-
-## 📤 Output Format (STRICT — same across all members)
-```python
+```json
 {
-    "solution": [0, 1, 3],   # indices of chosen items
-    "cost": 13,              # total value achieved
-    "time": 0.0008           # seconds
+  "weights": [2, 3, 4, 5],
+  "values": [3, 4, 5, 6],
+  "capacity": 8
 }
 ```
 
----
+Required function:
 
-## 🎤 Viva Questions You Should Own
-
-- What is the 0/1 Knapsack problem? How is it different from Fractional Knapsack?
-- Why is 0/1 Knapsack NP-hard but solvable in pseudo-polynomial time?
-- Walk through the DP table construction for a small example.
-- Why does the greedy approach fail for 0/1 Knapsack? Give a counterexample.
-- What is the approximation ratio of the greedy solution?
-
----
-
-## 📚 Syllabus Modules You Cover
-| Module | Concept |
-|--------|---------|
-| Module 1 | Greedy algorithms |
-| Module 2 | Dynamic Programming, Backtracking |
-| Module 7 | NP-hardness, Approximation analysis |
-
----
-
-## 💡 Counterexample to Keep Ready (for viva)
+```python
+def load_instance(path):
+    # Returns weights, values, capacity
 ```
-Items:   weight=[1, 3, 3], value=[2, 3, 3], capacity=6
 
-Greedy (by ratio):
-  Item 0 ratio=2.0 → take it  (w=1, v=2)
-  Item 1 ratio=1.0 → take it  (w=3, v=3)
-  Item 2 ratio=1.0 → take it  (w=3, v=3)
-  Total weight = 7 > 6, so drop item 2
-  Greedy value = 5
+### `exact.py`
 
-DP Exact:
-  Take items 1 + 2: weight=6, value=6
-  Exact value = 6
+Implement the exact 0/1 Knapsack solver.
+
+Required:
+- Dynamic Programming
+
+Optional:
+- Backtracking for very small inputs
+
+Required function:
+
+```python
+def solve_exact(weights, values, capacity):
+    # Returns {"solution": [indices], "cost": total_value, "time": float}
 ```
-👉 Greedy missed the optimal. This is your killer viva answer.
 
----
+For Knapsack:
+- `solution` = chosen item indices
+- `cost` = total value achieved
 
-## ⚠️ Rules
-- Only work inside `src/knapsack/` (don't touch tsp or setcover)
-- Push to GitHub **daily**
-- All functions must return the standard dict format
-- Coordinate with team on `data/knapsack/` input file format
+### `approx.py`
+
+Implement a greedy approximation.
+
+Required:
+- sort by value/weight ratio
+- select items while capacity allows
+
+Required function:
+
+```python
+def solve_approx(weights, values, capacity):
+    # Returns {"solution": [indices], "cost": total_value, "time": float}
+```
+
+### `analysis.py`
+
+Compare exact and approximate results.
+
+Recommended ratio:
+
+```python
+exact_cost / approx_cost
+```
+
+Because this is a maximization problem, a ratio above `1.0` means greedy performed worse than exact.
+
+Required function:
+
+```python
+def analyze(exact_result, approx_result):
+    # Returns ratio, times, and costs in a dict
+```
+
+### `visualize.py`
+
+Use `matplotlib` to show:
+
+- item weights
+- item values
+- which items were chosen by exact vs greedy
+- capacity context where useful
+
+Required function:
+
+```python
+def visualize(weights, values, exact_solution, approx_solution, capacity, output_path=None):
+    # Saves a plot to outputs/ or another requested path
+```
+
+### `__init__.py`
+
+Export the main functions so `main.py` can import them cleanly.
+
+## Controller Integration
+
+You must add a `knapsack` branch in `main.py` using the same pattern used by Set Cover:
+
+1. Add a `knapsack` subcommand.
+2. Add `--input`.
+3. Add `--visualize`.
+4. Add `--plot-output`.
+5. Use `data/person3_knapsack/sample.json` as the default input.
+6. Load data, run exact, run approx, run analysis, optionally run visualization.
+7. Print the final result as JSON.
+
+The root controller output should look like:
+
+```python
+{
+    "problem": "knapsack",
+    "input_file": "...",
+    "exact": {...},
+    "approx": {...},
+    "analysis": {...},
+    "visualization": {...}  # only when requested
+}
+```
+
+## Strict Output Format For Solvers
+
+Every solver must return:
+
+```python
+{
+    "solution": [...],
+    "cost": 13,
+    "time": 0.0008
+}
+```
+
+## Recommended Counterexample To Test
+
+Use an example where greedy by ratio fails so the analysis is meaningful.
+
+Example:
+
+```python
+weights = [1, 3, 3]
+values = [2, 3, 3]
+capacity = 6
+```
+
+This is useful for both testing and viva explanation.
+
+## Rules You Must Follow
+
+- Only create or edit files inside `people/person3_knapsack/`, `data/person3_knapsack/`, and your Knapsack section in `main.py`.
+- Do not modify Person 1 or Person 2 code.
+- Keep your file and module layout parallel to the existing Set Cover implementation.
+- Make the implementation runnable from the project root.
+- Write plots into `outputs/`.
+
+## Documentation Rule
+
+Every time you add or change functionality, you must also update:
+
+- `README.md` at the repo root
+- `person3_Knapsack.md`
+
+Those updates must describe:
+
+- what was added
+- where it lives in the directory structure
+- how it connects to `main.py`
+- how to run it
+
+Documentation updates are part of the task, not optional cleanup.
+
+## Goal
+
+This file should be enough for someone to build the entire Knapsack section in the same structure and integration style already established in the repository.

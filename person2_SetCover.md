@@ -1,146 +1,162 @@
-# 👤 Person 2 — Set Cover Problem
+# Person 2 - Set Cover
 
-## 🗂️ Your Folder
-```
-src/setcover/
-├── exact.py
-├── approx.py
-├── analysis.py
-└── visualize.py
-```
-Also contribute to: `main.py` (your section), `data/setcover/`
+## Your Workspace
 
----
+Your current implementation lives in:
 
-## 📌 Your Responsibility
-Implement the **full pipeline** for Set Cover:
-- Exact solution (small inputs)
-- Greedy approximation (large inputs)
-- Analysis (compare both)
-- Visualization (show which sets cover the universe)
-
----
-
-## 🧩 Problem Recap
-- **Universe U** = set of all elements (e.g., {1, 2, 3, 4, 5})
-- **Collection S** = list of subsets (e.g., {1,2}, {2,3,4}, {4,5})
-- **Goal:** Pick the fewest subsets from S that together cover all of U
-
----
-
-## ⚙️ What to Build
-
-### `exact.py` — Exact Set Cover
-**Algorithm: Backtracking**
-- Try all combinations of subsets
-- Find the minimum number of subsets that cover U
-- Time complexity: O(2ⁿ) where n = number of subsets
-
-```python
-def solve_exact(universe, subsets):
-    # Returns: {"solution": [list of chosen set indices], "cost": int, "time": float}
+```text
+people/person2_setcover/
+├── __init__.py
+├── README.md
+└── setcover/
+    ├── __init__.py
+    ├── io.py
+    ├── exact.py
+    ├── approx.py
+    ├── analysis.py
+    └── visualize.py
 ```
 
----
+Your dataset lives in:
 
-### `approx.py` — Greedy Approximation ⭐ (Core deliverable)
-**Algorithm: Greedy Set Cover**
-- At each step, pick the subset that covers the **most uncovered elements**
-- Repeat until universe is fully covered
-- Approximation ratio: `O(log n)` where n = |U|
-
-```python
-def solve_approx(universe, subsets):
-    # Returns: {"solution": [list of chosen set indices], "cost": int, "time": float}
+```text
+data/person2_setcover/
+└── sample.json
 ```
 
----
+Your controller integration lives in the Set Cover section of `main.py`.
 
-### `analysis.py` — Compare Results
-- Approximation ratio = `len(greedy_solution) / len(exact_solution)`
-- Record runtime of both
-- Print comparison
+## How The Repo Is Connected
 
-```python
-def analyze(exact_result, approx_result):
-    # Returns: {"ratio": float, "exact_time": float, "approx_time": float}
-```
+- `main.py` is the shared controller.
+- It reads CLI input, selects a topic, loads input data, runs the pipeline, and prints JSON output.
+- Each person's topic lives under `people/`.
+- Each topic should have the same internal shape:
+  - `io.py`
+  - `exact.py`
+  - `approx.py`
+  - `analysis.py`
+  - `visualize.py`
+- Each topic should have its own sample data under `data/`.
+- Plot images should be written into `outputs/`.
+- `frontend/` is only a placeholder for now and should remain untouched until later.
 
----
+Your Set Cover implementation is the reference structure for the rest of the repo.
 
-### `visualize.py` — Coverage Visualization
-- Show the universe as elements
-- Highlight which sets were chosen (exact vs greedy)
-- Use `matplotlib` — simple bar/grid or Venn-style diagram
+## What Exists So Far
 
-```python
-def visualize(universe, subsets, exact_solution, approx_solution):
-    # Visual comparison of coverage
-```
+### `io.py`
 
----
+Loads a JSON Set Cover instance:
 
-## 📅 Your Day-by-Day Plan
-
-| Day | Task |
-|-----|------|
-| Apr 7 | Repo setup, agree on input/output format with team |
-| Apr 8–9 | `exact.py` — Backtracking exact solver |
-| Apr 10–11 | `approx.py` — Greedy Set Cover |
-| Apr 12 | `analysis.py` — timing + approximation ratio |
-| Apr 13 | `visualize.py` — coverage diagram |
-| Apr 14 | Integration with `main.py`, fix bugs |
-| Apr 15 | Report: Set Cover section + PPT slides |
-| Apr 16 | Final polish, demo recording |
-
----
-
-## 📦 Input Format (agree with team on Day 1)
-```python
-universe = {1, 2, 3, 4, 5}
-
-subsets = [
-    {1, 2},
-    {2, 3, 4},
-    {4, 5},
-    {1, 3, 5}
-]
-```
-
----
-
-## 📤 Output Format (STRICT — same across all members)
-```python
+```json
 {
-    "solution": [1, 2],   # indices of chosen subsets
-    "cost": 2,            # number of sets chosen
-    "time": 0.0011        # seconds
+  "universe": [1, 2, 3, 4, 5, 6],
+  "subsets": [
+    [1, 2, 3],
+    [2, 4],
+    [3, 4, 5],
+    [4, 5, 6],
+    [1, 6],
+    [2, 5, 6]
+  ]
 }
 ```
 
----
+### `exact.py`
 
-## 🎤 Viva Questions You Should Own
+Implements exact Set Cover using backtracking and returns:
 
-- What is the Set Cover problem? Give a real-world example.
-- Why is Set Cover NP-hard?
-- How does the Greedy algorithm work for Set Cover?
-- What is the approximation ratio of Greedy Set Cover? Why is it `O(log n)`?
-- When would the greedy solution equal the optimal solution?
+```python
+{
+    "solution": [0, 3],
+    "cost": 2,
+    "time": 0.00004
+}
+```
 
----
+### `approx.py`
 
-## 📚 Syllabus Modules You Cover
-| Module | Concept |
-|--------|---------|
-| Module 1 | Greedy algorithms |
-| Module 2 | Backtracking (exact solver) |
-| Module 7 | NP-hardness, Approximation ratio analysis |
+Implements greedy Set Cover by repeatedly choosing the subset that covers the most uncovered elements.
 
----
+### `analysis.py`
 
-## ⚠️ Rules
-- Only work inside `src/setcover/` (don't touch tsp or knapsack)
-- Push to GitHub **daily**
-- All functions must return the standard dict format
-- Coordinate with team on `data/setcover/` input file format
+Computes:
+
+```python
+len(approx_solution) / len(exact_solution)
+```
+
+and returns runtime and cost comparison data.
+
+### `visualize.py`
+
+Uses `matplotlib` to generate a side-by-side coverage comparison and save it to `outputs/`.
+
+## Current Controller Flow
+
+`main.py` currently supports:
+
+```bash
+python3 main.py setcover --input data/person2_setcover/sample.json
+python3 main.py setcover --input data/person2_setcover/sample.json --visualize --plot-output outputs/setcover_sample.png
+```
+
+Flow:
+
+1. `main.py` receives the `setcover` command.
+2. It loads the instance using `people.person2_setcover.setcover.load_instance`.
+3. It runs `solve_exact`.
+4. It runs `solve_approx`.
+5. It runs `analyze`.
+6. If requested, it runs `visualize`.
+7. It prints the combined JSON result.
+
+## Standard Output Format
+
+Every solver must return:
+
+```python
+{
+    "solution": [1, 2],
+    "cost": 2,
+    "time": 0.0011
+}
+```
+
+For Set Cover:
+- `solution` = indices of chosen subsets
+- `cost` = number of subsets chosen
+
+## What To Keep Doing
+
+If you extend the Set Cover part later, keep the same structure and only add to it cleanly. Examples:
+
+- more sample datasets in `data/person2_setcover/`
+- a better visualization layout
+- auto-switching between exact and approximation based on size
+- richer CLI options in `main.py`
+
+## Rules You Must Follow
+
+- Keep all Set Cover implementation files inside `people/person2_setcover/`.
+- Keep Set Cover data files inside `data/person2_setcover/`.
+- Update only the Set Cover branch of `main.py` when changing your controller integration.
+- Save plots and generated assets into `outputs/`.
+- Do not move code back into old `src/` folders.
+
+## Documentation Rule
+
+Every time you add or change functionality, you must also update:
+
+- `README.md` at the repo root
+- `person2_SetCover.md`
+
+Those updates must explain:
+
+- what changed
+- where the files are now
+- how the Set Cover flow connects to `main.py`
+- how to run the new or updated feature
+
+The repo documentation must always match the actual code layout.
