@@ -33,7 +33,7 @@ You will update `main.py` only for your own Knapsack controller section.
 - Every topic should follow the same internal package shape.
 - Each topic should add its own data folder under `data/`.
 - Visualization output should go to `outputs/`.
-- `frontend/` exists only as a placeholder right now and should not be implemented yet.
+- `frontend/` is now the shared UI layer for the project.
 
 Your job is to build the Knapsack part in the same style already used by Person 2 for Set Cover.
 
@@ -174,6 +174,30 @@ Every solver must return:
 }
 ```
 
+## Frontend Responsibility
+
+The shared frontend now exists under:
+
+```text
+frontend/
+├── index.html
+├── styles.css
+└── app.js
+```
+
+The input editor phase is already done for Knapsack in the shared frontend through an item table and capacity input.
+
+Your next frontend phase is to complete Knapsack steps 2 and 3:
+
+1. visualize the Knapsack algorithm iteration by iteration inside the shared frontend
+2. keep the final Knapsack output pinned in the output panel after the run finishes
+
+Required frontend expectation:
+
+- Show item selection and capacity usage visually instead of reducing the algorithm to plain text only.
+- Reuse the shared three-stage frontend layout rather than creating a separate page or separate app.
+- Keep Knapsack-specific frontend logic organized inside the shared frontend files.
+
 ## Recommended Counterexample To Test
 
 Use an example where greedy by ratio fails so the analysis is meaningful.
@@ -202,6 +226,7 @@ Every time you add or change functionality, you must also update:
 
 - `README.md` at the repo root
 - `person3_Knapsack.md`
+- `frontend/README.md` if your work changes the shared UI
 
 Those updates must describe:
 
@@ -209,9 +234,10 @@ Those updates must describe:
 - where it lives in the directory structure
 - how it connects to `main.py`
 - how to run it
+- how it connects to the shared frontend if frontend behavior changed
 
 Documentation updates are part of the task, not optional cleanup.
 
 ## Goal
 
-This file should be enough for someone to build the entire Knapsack section in the same structure and integration style already established in the repository.
+This file should be enough for someone to build the entire Knapsack section in the same structure and integration style already established in the repository, and then finish the remaining shared-frontend visualization/output phase for Knapsack.

@@ -38,7 +38,7 @@ You will update `main.py` only for your own TSP controller section so the root-l
   - visualization
 - Input files go under `data/<person_topic>/`.
 - Plot images and other generated artifacts go under `outputs/`.
-- `frontend/` exists as a placeholder for later work and should not be implemented yet.
+- `frontend/` is now the shared UI layer for the whole project.
 
 Your job is to make TSP follow the same structure and flow already used by Person 2 for Set Cover.
 
@@ -176,6 +176,30 @@ For TSP:
 - `solution` = route/path
 - `cost` = total route cost
 
+## Frontend Responsibility
+
+The shared frontend now exists under:
+
+```text
+frontend/
+├── index.html
+├── styles.css
+└── app.js
+```
+
+The input editor phase is already done in the shared frontend for TSP through a distance-matrix table.
+
+Your next frontend phase is to complete TSP steps 2 and 3:
+
+1. visualize the TSP algorithm iteration by iteration inside the shared frontend
+2. keep the final TSP output pinned in the output panel after the run finishes
+
+Required frontend expectation:
+
+- If the algorithm is graph-based, show a graph or route view instead of falling back to a raw table.
+- Reuse the shared three-stage frontend flow rather than creating a separate page or separate app.
+- Keep the TSP-specific frontend logic in the shared frontend files cleanly organized.
+
 ## Rules You Must Follow
 
 - Only create or edit files inside `people/person1_tsp/`, `data/person1_tsp/`, and your TSP section in `main.py`.
@@ -190,6 +214,7 @@ Every time you add or change project functionality, you must also update:
 
 - `README.md` at the repo root
 - `person1_TSP.md`
+- `frontend/README.md` if your change affects the shared UI flow
 
 Those updates must describe:
 
@@ -197,9 +222,10 @@ Those updates must describe:
 - where it lives in the directory structure
 - how it connects to `main.py`
 - how to run it
+- how it connects to the shared frontend if frontend behavior changed
 
 Do not leave the documentation behind the code. Keep both in sync in the same round of work.
 
 ## Goal
 
-This file should be sufficient for someone to build the complete TSP section in the same style as the current Set Cover section, without needing any extra setup instructions.
+This file should be sufficient for someone to build the complete TSP section in the same style as the current Set Cover section, and then finish the remaining TSP frontend visualization/output phase inside the shared UI.

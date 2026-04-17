@@ -39,7 +39,7 @@ Your controller integration lives in the Set Cover section of `main.py`.
   - `visualize.py`
 - Each topic should have its own sample data under `data/`.
 - Plot images should be written into `outputs/`.
-- `frontend/` is only a placeholder for now and should remain untouched until later.
+- `frontend/` is now the shared UI layer and already includes the first Set Cover frontend implementation.
 
 Your Set Cover implementation is the reference structure for the rest of the repo.
 
@@ -93,6 +93,16 @@ and returns runtime and cost comparison data.
 
 Uses `matplotlib` to generate a side-by-side coverage comparison and save it to `outputs/`.
 
+### Shared frontend
+
+The shared frontend now includes:
+
+- a Set Cover input table
+- Set Cover algorithm playback
+- a pinned Set Cover final output panel
+
+This makes Set Cover the reference implementation for the frontend flow as well as the backend structure.
+
 ## Current Controller Flow
 
 `main.py` currently supports:
@@ -136,6 +146,7 @@ If you extend the Set Cover part later, keep the same structure and only add to 
 - a better visualization layout
 - auto-switching between exact and approximation based on size
 - richer CLI options in `main.py`
+- richer frontend playback states in `frontend/app.js`
 
 ## Rules You Must Follow
 
@@ -151,6 +162,7 @@ Every time you add or change functionality, you must also update:
 
 - `README.md` at the repo root
 - `person2_SetCover.md`
+- `frontend/README.md` if the shared frontend changes
 
 Those updates must explain:
 
@@ -158,5 +170,6 @@ Those updates must explain:
 - where the files are now
 - how the Set Cover flow connects to `main.py`
 - how to run the new or updated feature
+- how the Set Cover behavior fits into the shared frontend flow
 
 The repo documentation must always match the actual code layout.

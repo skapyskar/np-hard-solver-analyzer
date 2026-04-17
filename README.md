@@ -17,7 +17,10 @@ np-hard-solver-analyzer/
 ├── outputs/
 │   └── .gitkeep
 ├── frontend/
-│   └── README.md
+│   ├── README.md
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
 └── people/
     ├── person1_tsp/
     ├── person2_setcover/
@@ -39,7 +42,7 @@ np-hard-solver-analyzer/
 - Each person's implementation lives inside their own folder under `people/`.
 - Problem-specific input files live under `data/<person_topic>/`.
 - Generated plots and future exported assets go into `outputs/`.
-- `frontend/` is reserved for the shared UI layer and is intentionally not implemented yet.
+- `frontend/` now contains the shared UI layer as a static browser app.
 
 At the moment, the Set Cover pipeline is the only completed topic:
 
@@ -51,6 +54,12 @@ At the moment, the Set Cover pipeline is the only completed topic:
 - `visualize.py` generates a plot using `matplotlib`.
 
 The same connection pattern should be followed later for TSP and Knapsack so the root controller can call each topic in a consistent way.
+
+For frontend work, the shared UI now has this phase split:
+
+- Input editing is implemented for Set Cover, TSP, and Knapsack.
+- Step-by-step visualization and pinned final output are implemented for Set Cover.
+- TSP and Knapsack still need their own visualization + final-output stages added by their problem owners.
 
 ## Development Phases So Far
 
@@ -82,7 +91,19 @@ The same connection pattern should be followed later for TSP and Knapsack so the
 - The assignment files for Person 1, Person 2, and Person 3 are updated to match the current architecture.
 - Each assignment file now explicitly requires the contributor to update documentation whenever new work is added.
 
+### Phase 5: Shared Frontend Foundation
+
+- `frontend/index.html`, `frontend/styles.css`, and `frontend/app.js` were added as the initial shared UI.
+- The frontend now supports structured input editing for:
+  - Set Cover via a subset-vs-universe table
+  - TSP via a distance matrix table
+  - Knapsack via an item table with capacity input
+- The frontend now supports step-by-step visualization and pinned final output for Set Cover.
+- TSP and Knapsack use the same frontend shell, but their visualization stages are intentionally left as the next phase of work.
+
 ## How To Use The Project Right Now
+
+### Backend CLI
 
 Run the currently implemented Set Cover pipeline from the repository root:
 
@@ -104,6 +125,29 @@ What this does:
 - Computes the approximation ratio and runtime comparison
 - Prints the final result as JSON
 - Optionally saves a visualization image into `outputs/`
+
+### Frontend
+
+Open [frontend/index.html](/home/skapyskar/Documents/np-hard-solver-analyzer/frontend/index.html) in a browser.
+
+Or serve the repo root locally:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then visit:
+
+```text
+http://localhost:8000/frontend/
+```
+
+What the frontend currently supports:
+
+- Structured input editing for Set Cover, TSP, and Knapsack
+- Set Cover algorithm playback with per-iteration visualization
+- A pinned final output panel that remains visible after solving
+- Placeholder visualization panels for TSP and Knapsack that mark the next work phase clearly
 
 ## Output Format
 
@@ -144,4 +188,18 @@ The controller currently prints a JSON object like this:
 - Add each topic's sample data under `data/<person_topic>/`.
 - Save generated images and exported artifacts under `outputs/`.
 - When a new topic or feature is added, update this README so the current structure, completed phases, and usage instructions stay accurate.
-- Frontend work will be added later and should connect to the same controller and topic folders rather than bypassing them.
+- Frontend work should continue through the shared `frontend/` layer rather than splitting into separate mini-apps.
+
+## Next Frontend Phase
+
+The current shared UI establishes a common three-step flow:
+
+1. input editing
+2. algorithm visualization
+3. pinned final output
+
+Work remaining:
+
+- Person 1 must implement TSP visualization and pinned final output inside the shared frontend flow.
+- Person 3 must implement Knapsack visualization and pinned final output inside the shared frontend flow.
+- Person 2 can continue improving Set Cover playback so it stays the reference implementation for frontend behavior as well as backend structure.
