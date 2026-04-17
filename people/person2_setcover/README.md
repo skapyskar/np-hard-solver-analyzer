@@ -46,3 +46,4 @@ Whenever Set Cover changes, update:
 - `person2_SetCover.md`
 - this file
 - `frontend/README.md` if the shared frontend changes
+- `DEMO.md` for the Set Cover speaking section

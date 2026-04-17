@@ -61,3 +61,4 @@ Whenever the Knapsack work changes, update:
 - `person3_Knapsack.md`
 - this file
 - `frontend/README.md` if the shared frontend flow changes
+- `DEMO.md` for the Knapsack speaking section

@@ -61,3 +61,4 @@ Whenever the TSP work changes, update:
 - `person1_TSP.md`
 - this file
 - `frontend/README.md` if the shared frontend flow changes
+- `DEMO.md` for the TSP speaking section

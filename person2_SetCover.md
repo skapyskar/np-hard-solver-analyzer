@@ -163,6 +163,7 @@ Every time you add or change functionality, you must also update:
 - `README.md` at the repo root
 - `person2_SetCover.md`
 - `frontend/README.md` if the shared frontend changes
+- `DEMO.md` for the Set Cover section so the demo script matches the current code and visualization
 
 Those updates must explain:
 
@@ -171,5 +172,6 @@ Those updates must explain:
 - how the Set Cover flow connects to `main.py`
 - how to run the new or updated feature
 - how the Set Cover behavior fits into the shared frontend flow
+- how the Set Cover demo explanation should change if the algorithm, analysis, or playback changed
 
 The repo documentation must always match the actual code layout.

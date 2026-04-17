@@ -227,6 +227,7 @@ Every time you add or change functionality, you must also update:
 - `README.md` at the repo root
 - `person3_Knapsack.md`
 - `frontend/README.md` if your work changes the shared UI
+- `DEMO.md` for the Knapsack section so the spoken demo script stays aligned with the built implementation
 
 Those updates must describe:
 
@@ -235,6 +236,7 @@ Those updates must describe:
 - how it connects to `main.py`
 - how to run it
 - how it connects to the shared frontend if frontend behavior changed
+- how the Knapsack demo explanation should change if the algorithm, visualization, or outputs changed
 
 Documentation updates are part of the task, not optional cleanup.
 

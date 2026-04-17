@@ -215,6 +215,7 @@ Every time you add or change project functionality, you must also update:
 - `README.md` at the repo root
 - `person1_TSP.md`
 - `frontend/README.md` if your change affects the shared UI flow
+- `DEMO.md` for the TSP section so the spoken demo script stays aligned with the actual implementation
 
 Those updates must describe:
 
@@ -223,6 +224,7 @@ Those updates must describe:
 - how it connects to `main.py`
 - how to run it
 - how it connects to the shared frontend if frontend behavior changed
+- how the TSP demo explanation should change if the algorithm, visualization, or outputs changed
 
 Do not leave the documentation behind the code. Keep both in sync in the same round of work.
 
