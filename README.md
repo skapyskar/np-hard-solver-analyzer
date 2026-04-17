@@ -1,8 +1,32 @@
 # NP-Hard Problem Solver & Approximation Analyzer
 
-This repository is organized by problem owner. Each team member works inside a dedicated folder under `people/`, while the project root contains the shared control layer, common datasets, and output artifacts.
+A Python-based academic project that demonstrates exact algorithms, approximation methods, analysis, and visualization for major NP-Hard problems.
 
-## Current Structure
+The complete project is controlled through:
+
+main.py
+
+This file acts as the central runner for all implemented problem pipelines using command-line arguments.
+
+---
+
+# Problems Implemented
+
+* Travelling Salesman Problem (TSP)
+* Set Cover Problem
+* Knapsack Problem
+
+Each problem includes:
+
+* Input loading
+* Exact solving method
+* Approximation / heuristic method
+* Comparative analysis
+* Optional visualization
+
+---
+
+# Project Structure
 
 ```text
 np-hard-solver-analyzer/
@@ -11,214 +35,313 @@ np-hard-solver-analyzer/
 ├── person1_TSP.md
 ├── person2_SetCover.md
 ├── person3_Knapsack.md
+│
 ├── data/
-│   └── person2_setcover/
+│   ├── person1_tsp/
+│   │   └── sample.json
+│   ├── person2_setcover/
+│   │   └── sample.json
+│   └── person3_knapsack/
 │       └── sample.json
+│
 ├── outputs/
-│   └── .gitkeep
-├── frontend/
-│   ├── README.md
-│   ├── index.html
-│   ├── styles.css
-│   └── app.js
+│   ├── tsp_visualization.png
+│   ├── setcover_visualization.png
+│   └── knapsack_visualization.png
+│
 └── people/
     ├── person1_tsp/
-    ├── person2_setcover/
-    │   ├── README.md
-    │   └── setcover/
-    │       ├── __init__.py
+    │   └── tsp/
     │       ├── io.py
     │       ├── exact.py
     │       ├── approx.py
     │       ├── analysis.py
     │       └── visualize.py
+    │
+    ├── person2_setcover/
+    │   └── setcover/
+    │       ├── io.py
+    │       ├── exact.py
+    │       ├── approx.py
+    │       ├── analysis.py
+    │       └── visualize.py
+    │
     └── person3_knapsack/
+        └── knapsack/
+            ├── io.py
+            ├── exact.py
+            ├── approx.py
+            ├── analysis.py
+            └── visualize.py
 ```
 
-## How Everything Connects
+---
 
-- `main.py` is the top-level controller.
-- `main.py` reads command-line arguments, selects a problem pipeline, loads input data, runs the exact and approximation flows where the project requires comparison, performs analysis, and optionally triggers visualization.
-- Each person's implementation lives inside their own folder under `people/`.
-- Problem-specific input files live under `data/<person_topic>/`.
-- Generated plots and future exported assets go into `outputs/`.
-- `frontend/` now contains the shared UI layer as a static browser app.
+# What Each Folder Stores
 
-At the moment, the Set Cover pipeline is the only completed topic:
+## main.py
 
-- `main.py` imports the Set Cover functions from `people/person2_setcover/setcover/`.
-- `people/person2_setcover/setcover/io.py` loads JSON input.
-- `exact.py` computes the exact solution using subset-selection backtracking.
-- `approx.py` computes the greedy approximation used for project-level comparison.
-- `analysis.py` compares exact vs approximate results and reports project metadata.
-- `visualize.py` generates a comparison plot using `matplotlib`.
+Main project controller.
 
-The same connection pattern should be followed later for TSP and Knapsack so the root controller can call each topic in a consistent way.
+Handles:
 
-For frontend work, the shared UI now has this phase split:
+* command-line arguments
+* selecting problem pipeline
+* loading sample/custom input
+* running exact solver
+* running approximation solver
+* generating analysis
+* optional visualization
+* printing JSON result
 
-- Input editing is implemented for Set Cover, TSP, and Knapsack.
-- Step-by-step visualization and pinned final output are implemented for Set Cover.
-- TSP and Knapsack still need their own visualization + final-output stages added by their problem owners.
+---
 
-## Syllabus Boundary And Project Scope
+## people/
 
-For the Intractability-unit portion of this repository, TSP and Set Cover should stay close to the syllabus wording and allowed methods during explanation and demo.
+Contains modular implementations for each problem.
 
-At the same time, the original NP-AA project brief explicitly asks for exact vs approximate comparison. So the repository keeps both views in mind:
+### person1_tsp/
 
-- Set Cover: exact subset selection / exponential search / reduction-based understanding
-- TSP: exhaustive search framing for the syllabus-facing explanation
-- Decision/search/optimization wording should match the syllabus where possible
-- Exact vs approximation comparison is still part of the overall project requirement and remains documented as a project-level comparison goal
+Travelling Salesman Problem modules.
 
-Knapsack is being tracked separately from this strict boundary.
+### person2_setcover/
 
-## Development Phases So Far
+Set Cover modules.
 
-### Phase 1: Project Direction
+### person3_knapsack/
 
-- The repository was chosen for the NP-AA project.
-- The work was divided by problem domain instead of by role.
-- Three problem owners were defined:
-  - Person 1: TSP
-  - Person 2: Set Cover
-  - Person 3: Knapsack
+Knapsack modules.
 
-### Phase 2: Shared Architecture
+---
 
-- The repository was restructured so each person's work lives in a separate folder under `people/`.
-- The root level was kept for shared control files such as `main.py`, project documentation, future frontend code, datasets, and outputs.
-- `frontend/` was reserved as a placeholder for later integration.
+## data/
 
-### Phase 3: Set Cover Pipeline
+Stores input datasets in JSON format.
 
-- The Person 2 Set Cover implementation was created under `people/person2_setcover/setcover/`.
-- A sample dataset was added under `data/person2_setcover/sample.json`.
-- `main.py` was wired to execute the Set Cover flow from the root.
-- Visualization output was set up to save plots into `outputs/`.
-
-### Phase 4: Documentation Alignment
-
-- The main README now reflects the actual folder structure and control flow.
-- The assignment files for Person 1, Person 2, and Person 3 are updated to match the current architecture.
-- Each assignment file now explicitly requires the contributor to update documentation whenever new work is added.
-
-### Phase 5: Shared Frontend Foundation
-
-- `frontend/index.html`, `frontend/styles.css`, and `frontend/app.js` were added as the initial shared UI.
-- The frontend now supports structured input editing for:
-  - Set Cover via a subset-vs-universe table
-  - TSP via a distance matrix table
-  - Knapsack via an item table with capacity input
-- The frontend now supports step-by-step visualization and pinned final output for Set Cover.
-- TSP and Knapsack use the same frontend shell, but their visualization stages are intentionally left as the next phase of work.
-
-## How To Use The Project Right Now
-
-### Backend CLI
-
-Run the currently implemented Set Cover pipeline from the repository root:
-
-```bash
-python3 main.py setcover --input data/person2_setcover/sample.json
-```
-
-Generate the Set Cover visualization:
-
-```bash
-python3 main.py setcover --input data/person2_setcover/sample.json --visualize --plot-output outputs/setcover_sample.png
-```
-
-What this does:
-
-- Loads the Set Cover instance from `data/person2_setcover/sample.json`
-- Runs the exact solver
-- Runs the greedy approximation solver
-- Compares exact vs approximate results
-- Prints the final result as JSON
-- Optionally saves a visualization image into `outputs/`
-
-### Frontend
-
-Open [frontend/index.html](/home/skapyskar/Documents/np-hard-solver-analyzer/frontend/index.html) in a browser.
-
-Or serve the repo root locally:
-
-```bash
-python3 -m http.server 8000
-```
-
-Then visit:
+Examples:
 
 ```text
-http://localhost:8000/frontend/
+data/person1_tsp/sample.json
+data/person2_setcover/sample.json
+data/person3_knapsack/sample.json
 ```
 
-What the frontend currently supports:
+---
 
-- Structured input editing for Set Cover, TSP, and Knapsack
-- Set Cover algorithm playback with per-iteration visualization
-- A pinned final output panel that remains visible after solving
-- Placeholder visualization panels for TSP and Knapsack that mark the next work phase clearly
+## outputs/
 
-## Output Format
+Stores generated charts and visualizations.
 
-The controller currently prints a JSON object like this:
+Examples:
+
+```text
+outputs/tsp_visualization.png
+outputs/setcover_visualization.png
+outputs/knapsack_visualization.png
+```
+
+---
+
+# Install Dependencies
+
+Run:
+
+```bash
+pip install matplotlib
+```
+
+If pip is not configured:
+
+```bash
+python -m pip install matplotlib
+```
+
+Optional:
+
+```bash
+pip install --upgrade pip
+```
+
+---
+
+# How To Run
+
+Run all commands from project root.
+
+---
+
+# Show All Available Commands
+
+```bash
+python main.py -h
+```
+
+---
+
+# Travelling Salesman Problem (TSP)
+
+## Run Default Dataset
+
+```bash
+python main.py tsp
+```
+
+## Run With Visualization
+
+```bash
+python main.py tsp --visualize
+```
+
+## Custom Input
+
+```bash
+python main.py tsp --input data/person1_tsp/sample.json
+```
+
+## Custom Plot Output
+
+```bash
+python main.py tsp --visualize --plot-output outputs/my_tsp.png
+```
+
+---
+
+# Set Cover Problem
+
+## Run Default Dataset
+
+```bash
+python main.py setcover
+```
+
+## Run With Visualization
+
+```bash
+python main.py setcover --visualize
+```
+
+## Custom Input
+
+```bash
+python main.py setcover --input data/person2_setcover/sample.json
+```
+
+## Custom Plot Output
+
+```bash
+python main.py setcover --visualize --plot-output outputs/my_setcover.png
+```
+
+---
+
+# Knapsack Problem
+
+## Run Default Dataset
+
+```bash
+python main.py knapsack
+```
+
+## Run With Visualization
+
+```bash
+python main.py knapsack --visualize
+```
+
+## Custom Input
+
+```bash
+python main.py knapsack --input data/person3_knapsack/sample.json
+```
+
+## Custom Plot Output
+
+```bash
+python main.py knapsack --visualize --plot-output outputs/my_knapsack.png
+```
+
+---
+
+# Example Output Format
 
 ```json
 {
-  "problem": "setcover",
-  "input_file": "data/person2_setcover/sample.json",
+  "problem": "tsp",
+  "input_file": "data/person1_tsp/sample.json",
   "exact": {
-    "solution": [0, 3],
-    "cost": 2,
-    "time": 0.00004
+    "solution": [0,1,3,2,0],
+    "cost": 80,
+    "time": 0.0021
   },
   "approx": {
-    "solution": [0, 3],
-    "cost": 2,
-    "time": 0.00001
+    "solution": [0,1,3,2,0],
+    "cost": 80,
+    "time": 0.0003
   },
   "analysis": {
     "ratio": 1.0,
-    "method": "Exact subset selection (exponential search)",
-    "approx_method": "Greedy Set Cover approximation",
-    "problem_type": "Optimization version of Set Cover",
-    "decision_form": "Can all elements be covered using at most k subsets?",
-    "universe_size": 6,
-    "subset_count": 6,
-    "exact_time": 0.00004,
-    "approx_time": 0.00001,
-    "exact_cost": 2,
-    "approx_cost": 2
-  },
-  "visualization": {
-    "status": "generated",
-    "output": "outputs/setcover_sample.png"
+    "city_count": 4
   }
 }
 ```
 
-## Rules For Future Updates
+---
 
-- Keep each topic inside its own `people/personX_topic/` folder.
-- Keep the root `main.py` as the shared controller.
-- Add each topic's sample data under `data/<person_topic>/`.
-- Save generated images and exported artifacts under `outputs/`.
-- When a new topic or feature is added, update this README so the current structure, completed phases, and usage instructions stay accurate.
-- Frontend work should continue through the shared `frontend/` layer rather than splitting into separate mini-apps.
+# Algorithms Used
 
-## Next Frontend Phase
+## TSP
 
-The current shared UI establishes a common three-step flow:
+* Exact: Exhaustive Search
+* Approximation: Nearest Neighbor
 
-1. input editing
-2. algorithm visualization
-3. pinned final output
+## Set Cover
 
-Work remaining:
+* Exact: Subset Search / Backtracking
+* Approximation: Greedy Selection
 
-- Person 1 must implement TSP visualization and pinned final output inside the shared frontend flow, while keeping the syllabus-facing explanation clear.
-- Person 3 must implement Knapsack visualization and pinned final output inside the shared frontend flow.
-- Person 2 can continue improving Set Cover playback so it stays the reference implementation for frontend behavior as well as backend structure.
+## Knapsack
+
+* Exact: Dynamic Programming
+* Approximation: Greedy by Value/Weight Ratio
+
+---
+
+# Educational Objective
+
+This project demonstrates:
+
+* NP-Hard problem complexity
+* Exact vs approximate solutions
+* Runtime comparison
+* Optimization tradeoffs
+* Real dataset execution through Python CLI
+
+---
+
+# Team Ownership
+
+* Chanakya bansal 24bce0694: TSP
+* Person 2: Set Cover
+* Person 3: Knapsack
+
+---
+
+# Recommended Demo Commands
+
+```bash
+python main.py tsp
+python main.py tsp --visualize
+python main.py setcover
+python main.py setcover --visualize
+python main.py knapsack
+python main.py knapsack --visualize
+```
+
+---
+
+# Notes
+
+* All generated images are saved in outputs/
+* All datasets are stored in data/
+* Each problem is modular and independent
+* main.py acts as unified project controller
