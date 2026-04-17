@@ -12,7 +12,6 @@ people/person1_tsp/
     ├── __init__.py
     ├── io.py
     ├── exact.py
-    ├── approx.py
     ├── analysis.py
     └── visualize.py
 ```
@@ -23,11 +22,10 @@ Person 1 is responsible for building the full TSP backend flow so `main.py` can 
 
 - input loading
 - exact solving
-- approximation solving
 - analysis
 - visualization
 
-The TSP pipeline should follow the same shape already used by Set Cover.
+The TSP pipeline should follow the same shared structure, but for the syllabus-bound portion it must use TSP wording from the Intractability unit.
 
 ## Frontend Responsibility
 
@@ -46,12 +44,13 @@ What is already done for TSP:
 
 What Person 1 still needs to do next:
 
-1. implement TSP step-by-step visualization inside the shared frontend
+1. implement TSP exhaustive-search step-by-step visualization inside the shared frontend
 2. make the final TSP output stay pinned in the output panel after the run
 
 Important frontend rule:
 
 - Since TSP is graph-based, the visualization should show a route/graph view rather than falling back to a plain table.
+- Use syllabus wording: exhaustive search, factorial/exponential growth, no polynomial-time method known.
 
 ## Documentation Rule
 

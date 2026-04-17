@@ -12,7 +12,6 @@ people/person1_tsp/
     ├── __init__.py
     ├── io.py
     ├── exact.py
-    ├── approx.py
     ├── analysis.py
     └── visualize.py
 ```
@@ -33,7 +32,7 @@ You will update `main.py` only for your own TSP controller section so the root-l
 - Each topic should expose a consistent pipeline:
   - input loading
   - exact solver
-  - approximation solver
+  - approximation solver if the project comparison flow requires it
   - analysis
   - visualization
 - Input files go under `data/<person_topic>/`.
@@ -70,10 +69,8 @@ If you support coordinates for plotting, you may extend the file later, but keep
 Implement the exact TSP solver.
 
 Required:
-- DP with bitmask as the main exact method
-
-Optional:
-- brute-force/backtracking for very small inputs
+- Exhaustive search / brute force as the main syllabus-aligned method
+- Backtracking is acceptable if explained as exhaustive search over tours
 
 Required function:
 
@@ -84,15 +81,12 @@ def solve_exact(dist):
 
 ### `approx.py`
 
-Implement the approximation or heuristic solver.
+If you add the project-level comparison flow for TSP, implement the approximation or heuristic solver in a separate file and clearly label it as project-comparison functionality rather than the core syllabus-facing method.
 
-Required:
-- Nearest Neighbor heuristic
+Recommended project comparison option:
+- Nearest Neighbor
 
-Optional:
-- 2-opt improvement
-
-Required function:
+Required function if implemented:
 
 ```python
 def solve_approx(dist):
@@ -101,19 +95,13 @@ def solve_approx(dist):
 
 ### `analysis.py`
 
-Compare exact and approximate outputs.
+Report exact-run information and, if project comparison is enabled, compare exact and approximate outputs.
 
 Required function:
 
 ```python
-def analyze(exact_result, approx_result):
-    # Returns ratio, times, and costs in a dict
-```
-
-Recommended ratio:
-
-```python
-approx_cost / exact_cost
+def analyze(exact_result, dist, approx_result=None):
+    # Returns exact metadata and optional comparison data
 ```
 
 ### `visualize.py`
@@ -127,8 +115,8 @@ If the dataset contains only a distance matrix, you may:
 Required function:
 
 ```python
-def visualize(dist, exact_solution, approx_solution, output_path=None):
-    # Saves or renders a route comparison figure
+def visualize(dist, exact_solution, output_path=None):
+    # Saves or renders an exact-route figure
 ```
 
 ### `__init__.py`
@@ -144,7 +132,7 @@ You must add a TSP branch in `main.py` using the same pattern used for Set Cover
 3. Accept `--visualize`.
 4. Accept `--plot-output`.
 5. Load the TSP instance from `data/person1_tsp/sample.json` by default.
-6. Run exact, approximation, analysis, and optional visualization.
+6. Run exact, optional approximation, analysis, and optional visualization.
 7. Print the final result as JSON.
 
 The result format should stay consistent with the existing controller output:
@@ -154,7 +142,7 @@ The result format should stay consistent with the existing controller output:
     "problem": "tsp",
     "input_file": "...",
     "exact": {...},
-    "approx": {...},
+    "approx": {...},  # optional if project comparison is enabled
     "analysis": {...},
     "visualization": {...}  # only when requested
 }
@@ -191,12 +179,14 @@ The input editor phase is already done in the shared frontend for TSP through a 
 
 Your next frontend phase is to complete TSP steps 2 and 3:
 
-1. visualize the TSP algorithm iteration by iteration inside the shared frontend
+1. visualize the TSP exhaustive-search process iteration by iteration inside the shared frontend
 2. keep the final TSP output pinned in the output panel after the run finishes
 
 Required frontend expectation:
 
 - If the algorithm is graph-based, show a graph or route view instead of falling back to a raw table.
+- Use syllabus wording clearly for the theory-facing explanation: exhaustive search, no polynomial-time method known, factorial/exponential growth.
+- If you add a project-level approximation path, keep it clearly labeled as project comparison work and do not let it replace the syllabus explanation.
 - Reuse the shared three-stage frontend flow rather than creating a separate page or separate app.
 - Keep the TSP-specific frontend logic in the shared frontend files cleanly organized.
 

@@ -37,6 +37,8 @@ Person 2 should keep improving Set Cover cleanly inside the shared structure:
 - backend logic stays under `people/person2_setcover/`
 - shared frontend behavior stays under `frontend/`
 - documentation stays synchronized across root and workspace files
+- wording stays aligned with the syllabus for theory-facing explanation
+- project-level exact vs approximation comparison stays available where required by the original NP-AA brief
 
 ## Documentation Rule
 

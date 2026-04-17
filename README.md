@@ -38,7 +38,7 @@ np-hard-solver-analyzer/
 ## How Everything Connects
 
 - `main.py` is the top-level controller.
-- `main.py` reads command-line arguments, selects a problem pipeline, loads input data, runs the exact and approximation solvers, performs analysis, and optionally triggers visualization.
+- `main.py` reads command-line arguments, selects a problem pipeline, loads input data, runs the exact and approximation flows where the project requires comparison, performs analysis, and optionally triggers visualization.
 - Each person's implementation lives inside their own folder under `people/`.
 - Problem-specific input files live under `data/<person_topic>/`.
 - Generated plots and future exported assets go into `outputs/`.
@@ -48,10 +48,10 @@ At the moment, the Set Cover pipeline is the only completed topic:
 
 - `main.py` imports the Set Cover functions from `people/person2_setcover/setcover/`.
 - `people/person2_setcover/setcover/io.py` loads JSON input.
-- `exact.py` computes the optimal solution using backtracking.
-- `approx.py` computes the greedy approximation.
-- `analysis.py` compares exact vs approximate results and computes the ratio.
-- `visualize.py` generates a plot using `matplotlib`.
+- `exact.py` computes the exact solution using subset-selection backtracking.
+- `approx.py` computes the greedy approximation used for project-level comparison.
+- `analysis.py` compares exact vs approximate results and reports project metadata.
+- `visualize.py` generates a comparison plot using `matplotlib`.
 
 The same connection pattern should be followed later for TSP and Knapsack so the root controller can call each topic in a consistent way.
 
@@ -60,6 +60,19 @@ For frontend work, the shared UI now has this phase split:
 - Input editing is implemented for Set Cover, TSP, and Knapsack.
 - Step-by-step visualization and pinned final output are implemented for Set Cover.
 - TSP and Knapsack still need their own visualization + final-output stages added by their problem owners.
+
+## Syllabus Boundary And Project Scope
+
+For the Intractability-unit portion of this repository, TSP and Set Cover should stay close to the syllabus wording and allowed methods during explanation and demo.
+
+At the same time, the original NP-AA project brief explicitly asks for exact vs approximate comparison. So the repository keeps both views in mind:
+
+- Set Cover: exact subset selection / exponential search / reduction-based understanding
+- TSP: exhaustive search framing for the syllabus-facing explanation
+- Decision/search/optimization wording should match the syllabus where possible
+- Exact vs approximation comparison is still part of the overall project requirement and remains documented as a project-level comparison goal
+
+Knapsack is being tracked separately from this strict boundary.
 
 ## Development Phases So Far
 
@@ -122,7 +135,7 @@ What this does:
 - Loads the Set Cover instance from `data/person2_setcover/sample.json`
 - Runs the exact solver
 - Runs the greedy approximation solver
-- Computes the approximation ratio and runtime comparison
+- Compares exact vs approximate results
 - Prints the final result as JSON
 - Optionally saves a visualization image into `outputs/`
 
@@ -169,6 +182,12 @@ The controller currently prints a JSON object like this:
   },
   "analysis": {
     "ratio": 1.0,
+    "method": "Exact subset selection (exponential search)",
+    "approx_method": "Greedy Set Cover approximation",
+    "problem_type": "Optimization version of Set Cover",
+    "decision_form": "Can all elements be covered using at most k subsets?",
+    "universe_size": 6,
+    "subset_count": 6,
     "exact_time": 0.00004,
     "approx_time": 0.00001,
     "exact_cost": 2,
@@ -200,6 +219,6 @@ The current shared UI establishes a common three-step flow:
 
 Work remaining:
 
-- Person 1 must implement TSP visualization and pinned final output inside the shared frontend flow.
+- Person 1 must implement TSP visualization and pinned final output inside the shared frontend flow, while keeping the syllabus-facing explanation clear.
 - Person 3 must implement Knapsack visualization and pinned final output inside the shared frontend flow.
 - Person 2 can continue improving Set Cover playback so it stays the reference implementation for frontend behavior as well as backend structure.

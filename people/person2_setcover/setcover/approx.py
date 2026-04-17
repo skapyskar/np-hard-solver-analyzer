@@ -21,7 +21,7 @@ def _normalize_input(universe, subsets):
 
 
 def solve_approx(universe, subsets):
-    """Return a greedy set cover."""
+    """Return a greedy set cover approximation."""
     start = perf_counter()
     universe_set, normalized_subsets = _normalize_input(universe, subsets)
 

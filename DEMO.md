@@ -9,6 +9,7 @@ Important note:
 - TSP and Knapsack sections below are written assuming their owners complete their parts according to [person1_TSP.md](/home/skapyskar/Documents/np-hard-solver-analyzer/person1_TSP.md) and [person3_Knapsack.md](/home/skapyskar/Documents/np-hard-solver-analyzer/person3_Knapsack.md).
 - For Set Cover, file and line references below point to the actual current code.
 - For TSP and Knapsack, the explanation follows the required structure and algorithm plan defined in the assignment files, so those sections are the intended demo narrative once their implementation is added.
+- For the strict Intractability-unit boundary, TSP and Set Cover should still use syllabus wording in explanations. At the same time, the original NP-AA brief asks for exact-vs-approximate comparison, so the project keeps that comparison where needed. Knapsack is being tracked separately.
 
 Alignment rule:
 
@@ -18,11 +19,11 @@ Alignment rule:
 
 Suggested opening:
 
-"Our project is an NP-Hard Problem Solver and Approximation Analyzer. The main goal is to compare exact algorithms with approximation or heuristic algorithms, analyze their outputs, and visualize both the input and the solving process."
+"Our project is an NP-Hard Problem Solver and Approximation Analyzer. Our goal is to model NP-hard problems, solve small cases exactly, include approximation or heuristic comparison where the project requires it, and visualize how the algorithms behave."
 
 "The project is divided by problem owner. Person 1 handles TSP, Person 2 handles Set Cover, and Person 3 handles Knapsack. The shared controller is at the root, the problem-specific logic lives under `people/`, the sample data lives under `data/`, plots go to `outputs/`, and the browser UI lives under `frontend/`."
 
-"This directly matches the original NP-AA problem statement: solve NP-hard problems exactly for small inputs, use approximations or heuristics for scalability, compare optimal and approximate solutions, and analyze the trade-off between quality and runtime."
+"This directly matches the original NP-AA problem statement: understand computational hardness, implement exact and approximate approaches, and explain the trade-off between optimality and efficiency."
 
 ## Part 0A: Problem Statement And Why This Project Fits
 
@@ -33,17 +34,18 @@ Suggested narration:
 "Our project matches that requirement in three ways:"
 
 - "We include exact algorithms for small or feasible cases."
-- "We include approximation or heuristic approaches for faster solving."
-- "We compare both using cost, runtime, and approximation ratio."
+- "We include exact search for small inputs."
+- "We include approximation or heuristic comparison where the project asks for it."
+- "We explain feasibility versus intractability using runtime and growth-of-functions language from the syllabus."
 
-"In terms of algorithmic scope, the problem statement asks for Dynamic Programming, Backtracking, Greedy, heuristic approximation, and approximation-ratio analysis. Our current design covers all of these:"
+"In terms of the overall project design, our current design covers:"
 
-- "Set Cover exact: backtracking"
-- "Set Cover approximation: greedy"
-- "TSP exact: DP with bitmask plus optional backtracking for very small cases"
-- "TSP approximation: nearest neighbor heuristic"
-- "Knapsack exact: dynamic programming"
-- "Knapsack approximation: greedy by value-to-weight ratio"
+- "Set Cover exact: subset selection with exponential search"
+- "Set Cover approximation: greedy comparison flow"
+- "TSP exact: exhaustive search"
+- "TSP approximation: project-level heuristic path if implemented"
+- "Reduction-based understanding: Vertex Cover less-than-or-equal-to-p Set Cover"
+- "Knapsack is being tracked separately from the strict syllabus-bound TSP and Set Cover demo"
 
 "So the architecture and planned implementation are aligned with the original NP-AA brief."
 
@@ -53,7 +55,7 @@ Suggested narration:
 
 "The full project flow starts from the shared controller in [main.py](/home/skapyskar/Documents/np-hard-solver-analyzer/main.py). At lines 7 to 13, the controller imports the Set Cover pipeline functions from the Person 2 package. In the final version, the same pattern will exist for TSP and Knapsack as well."
 
-"The core execution happens in `run_setcover()` at lines 16 to 45. At line 17, the input is loaded. At lines 18 and 19, the exact and approximate solvers are run. At line 20, the analysis step compares those outputs. At lines 22 to 28, the result dictionary is assembled into one standard JSON object. Then, if visualization is requested, lines 30 to 43 generate the plot and add visualization metadata to the output."
+"The core execution happens in `run_setcover()` in `main.py`. The input is loaded, then the exact solver is run, then the greedy approximation solver is run, then analysis compares the two outputs, and if requested the visualization is generated."
 
 "The command-line interface is defined in `build_parser()` at lines 48 to 67. Right now the parser has a `setcover` subcommand. In the final project, TSP and Knapsack will add their own subcommands using the same pattern."
 
@@ -79,7 +81,7 @@ Suggested narration while showing the UI:
 
 Suggested application line:
 
-"This frontend is important for the project outcome because it makes the trade-off visible, not just printed. Instead of only saying exact and approximate algorithms are different, we show the input, the iteration process, and the final result side by side."
+"This frontend is important for the project outcome because it makes the comparison visible, not just printed. Instead of only saying exact and approximate methods differ, we show the input, the iteration process, and the final result side by side."
 
 ## Part 3: Person 2 Demo Script - Set Cover
 
@@ -131,26 +133,13 @@ Suggested line-by-line explanation:
 
 Suggested narration:
 
-"The approximation algorithm is in [approx.py](/home/skapyskar/Documents/np-hard-solver-analyzer/people/person2_setcover/setcover/approx.py). This is a classic greedy strategy. It does not always give the optimal answer, but it runs much faster."
+"The approximation algorithm is implemented in `people/person2_setcover/setcover/approx.py`. This is a classic greedy Set Cover strategy used for the project-level exact-vs-approximate comparison."
 
-"Again, lines 8 to 20 normalize and validate the input."
+"At each iteration, it looks at every subset, computes how many currently uncovered elements it would add, and chooses the subset with the largest gain."
 
-"The main function starts at line 23. At line 28, all universe elements are initially marked as uncovered. At line 29, we initialize the chosen subset list."
+"This does not guarantee the optimal answer in general, which is why comparing it against the exact solver is useful."
 
-"The main greedy loop is at lines 31 to 46."
-
-Suggested line-by-line explanation:
-
-- Line 31: keep iterating until every element is covered.
-- Lines 32 to 33: reset the best candidate subset for the current iteration.
-- Lines 35 to 39: for each subset, compute `gain`, meaning how many currently uncovered elements it would newly cover. If this gain is better than the best one so far, store that subset.
-- Lines 41 to 42: if no subset can add anything new, the instance cannot be completed.
-- Line 44: add the best subset index to the chosen solution.
-- Line 45: remove the newly covered elements from `uncovered`.
-
-"Finally, at lines 47 to 51, the chosen subset indices, total subset count, and runtime are returned."
-
-### 3.4 What Happens In Every Greedy Iteration
+### 3.4 What Happens In The Exact Search
 
 Use this example from the sample input:
 
@@ -165,21 +154,23 @@ Use this example from the sample input:
 
 Suggested narration:
 
-"At the start, all 6 elements are uncovered."
+"At the start, the exact algorithm begins with nothing covered and no chosen subsets."
 
-"Iteration 1: the greedy algorithm checks every subset and asks which one covers the largest number of uncovered elements. `S0`, `S2`, and `S3` each cover 3 new elements, but because the code only replaces the best choice when the gain is strictly larger, the first max encountered stays selected. So it picks `S0`. Covered becomes `{1,2,3}` and uncovered becomes `{4,5,6}`."
+"The search explores one subset-choice branch at a time. At each state, it decides whether to include the current subset or skip it."
 
-"Iteration 2: now the algorithm checks gains again with respect to only `{4,5,6}`. `S3` covers all 3 of them, which is the best possible gain. So it picks `S3`. Now the whole universe is covered."
+"If a branch already covers the whole universe, it becomes a candidate solution."
 
-"The greedy result becomes `[0,3]` with cost `2`."
+"If a branch already uses at least as many subsets as the current best solution, it is pruned."
+
+"If the union of all remaining subsets still cannot cover the universe, that branch is also pruned."
+
+"So what the audience sees in each iteration is not a greedy choice. It is a search state in an exponential subset-selection tree."
 
 ### 3.5 Analysis Step
 
 Suggested narration:
 
-"The comparison step is in [analysis.py](/home/skapyskar/Documents/np-hard-solver-analyzer/people/person2_setcover/setcover/analysis.py). At lines 8 and 9, the exact and approximate costs are extracted. At lines 11 to 13, the approximation ratio is computed as `approx_cost / exact_cost`. Then at lines 15 to 21, the result dictionary is returned with ratio, times, and costs."
-
-"If greedy matches exact, the ratio is `1.0`. If greedy uses more subsets, the ratio becomes greater than `1.0`."
+"The analysis step is in [analysis.py](/home/skapyskar/Documents/np-hard-solver-analyzer/people/person2_setcover/setcover/analysis.py). It reports both project-comparison data and theory-facing metadata: approximation ratio, exact and approximate runtimes, exact and approximate costs, and also the optimization and decision wording for Set Cover."
 
 ### 3.6 Visualization Step
 
@@ -197,11 +188,7 @@ Suggested narration:
 - `2` if the subset was chosen and contains that element
 - `1` if the subset was chosen but that specific element is not in the subset"
 
-"At lines 35 to 45, we create a two-panel figure: one for the exact solution and one for the greedy solution."
-
-"At lines 47 to 60, each panel is drawn. `imshow()` paints the matrix, axis labels are added, and an `X` marker is placed wherever a subset contains a universe element."
-
-"At lines 62 to 63, the color bar legend is added. At lines 64 to 67, the figure is saved to the requested output path."
+"The visualization shows both the exact solution and the greedy approximation side by side. That makes the exact-vs-approximate comparison easy to explain during the demo."
 
 ### 3.7 Set Cover Frontend Walkthrough
 
@@ -213,9 +200,7 @@ Suggested narration while operating the UI:
 
 "The frontend validation for Set Cover happens at lines 495 to 506. It removes duplicates, sorts the input, and checks whether the universe can actually be covered."
 
-"For frontend playback, the greedy steps are built at lines 508 to 552. This mirrors the backend greedy logic, but in addition to the final answer, it stores a step object after each iteration so the user can move through the process."
-
-"For frontend exact playback, lines 554 to 636 enumerate the search states of the backtracking process and store them as a step sequence."
+"For frontend playback, one mode shows greedy approximation steps and the other shows exact-search states."
 
 "At lines 638 to 659, the final run result is packaged with metadata and a pinned output object."
 
@@ -230,7 +215,7 @@ Suggested narration while operating the UI:
 
 ### 3.8 Suggested Closing For Person 2
 
-"So the Set Cover part demonstrates the complete flow: input loading, exact algorithm, approximation algorithm, analysis, backend visualization, and interactive frontend playback."
+"So the Set Cover part demonstrates the complete project flow: input loading, exact solving, approximation solving, analysis, backend visualization, and interactive frontend playback."
 
 ## Part 4: Person 1 Demo Script - TSP
 
@@ -250,43 +235,24 @@ Suggested narration:
 
 Suggested narration:
 
-"The required exact TSP algorithm is DP with bitmask, specified in `person1_TSP.md` lines 68 to 83. The reason for using bitmask DP is that it gives an exact answer while being much more efficient than brute force for moderate sizes."
-
-"The standard DP state is `dp[mask][i]`, meaning the minimum cost to start from the source city, visit exactly the set of cities represented by `mask`, and finish at city `i`."
+"The required TSP method for the syllabus-bound portion is exhaustive search, specified in `person1_TSP.md`. This matches the intractability-unit wording that no polynomial-time method is known in this context."
 
 Suggested line-by-line style explanation for the expected implementation:
 
-- First, initialize DP with the base state where only the start city is visited.
-- Then iterate through all masks.
-- For each mask, iterate through all ending cities `i` that are included in that mask.
-- Try extending the path to each unvisited city `j`.
-- Update `dp[mask | (1 << j)][j]` with the smaller cost.
-- After all states are processed, add the return edge back to the start city and take the minimum.
+- Start from city `0`.
+- Generate each possible permutation of the remaining cities.
+- Form one full tour from that permutation.
+- Compute its total cost edge by edge.
+- Compare it with the best tour cost found so far.
+- Keep the minimum-cost tour as the exact answer.
 
-"During the demo, Person 1 can explain each DP iteration as: current visited set, current ending city, next city being considered, and the updated best cost."
+"During the demo, Person 1 can explain each iteration as: current candidate permutation, current edge being added to the tour cost, and whether that full route becomes the new best solution."
 
-### 4.3 Approximation / Heuristic: Nearest Neighbor
-
-Suggested narration:
-
-"The required heuristic is Nearest Neighbor, defined in `person1_TSP.md` lines 85 to 100. At every step, it moves from the current city to the nearest unvisited city."
-
-Suggested iteration explanation:
-
-- Start from city 0.
-- Look at all unvisited cities.
-- Choose the one with the minimum distance from the current city.
-- Mark it visited.
-- Repeat until all cities are visited.
-- Finally return to the starting city.
-
-"This method is fast and easy to visualize, but it is not always optimal. That is exactly why comparing it against the exact DP solution is useful."
-
-### 4.4 Analysis Step
+### 4.3 Analysis Step
 
 Suggested narration:
 
-"The TSP analysis format is defined in `person1_TSP.md` lines 102 to 117. The expected ratio is `approx_cost / exact_cost`. If the heuristic tour is longer than the optimal one, the ratio will be greater than `1.0`."
+"The TSP analysis should keep the syllabus wording visible, but if the project comparison path is implemented it can also report exact-vs-approximate comparison metrics."
 
 ### 4.5 Visualization Step
 
@@ -296,11 +262,11 @@ Suggested narration:
 
 "For the frontend, the input table already exists in `frontend/app.js` lines 333 to 405. Each cell in the matrix is editable, and the Add City button dynamically grows the matrix."
 
-"The next frontend phase for TSP is already specified in `person1_TSP.md` lines 179 to 201: show actual graph or route playback iteration by iteration, then keep the final output pinned."
+"The next frontend phase for TSP is already specified in `person1_TSP.md`: show actual graph or route playback iteration by iteration for exhaustive search, then keep the final output pinned."
 
 ### 4.6 Suggested Closing For Person 1
 
-"So the TSP part of the project demonstrates how we compare an exact dynamic-programming solution with a fast heuristic, and how route construction can be visualized step by step."
+"So the TSP part of the project demonstrates how exhaustive search behaves on a classic NP-hard routing problem, and how route construction can be visualized step by step."
 
 ## Part 5: Person 3 Demo Script - Knapsack
 
@@ -421,8 +387,8 @@ Suggested narration:
 
 Suggested closing:
 
-"Overall, our project is designed around one shared architecture and three separate NP-hard problems. The common structure makes the project easier to maintain, compare, and demonstrate. Set Cover already shows the full end-to-end model, and TSP and Knapsack follow the same design with their own exact algorithms, approximation strategies, analysis, visualization, and frontend playback."
+"Overall, our project is designed around one shared architecture and three separate NP-hard problems. The common structure makes the project easier to maintain, compare, and demonstrate. Set Cover already shows the full end-to-end syllabus-aligned model, and TSP and Knapsack follow the same shared structure with their own implementations."
 
-"So in terms of the expected learning outcomes, this project helps us understand NP-hardness, implement both exact and approximate methods, and analyze the trade-off between optimality and efficiency with actual code, outputs, and visual explanation."
+"So in terms of the expected learning outcomes, this project helps us understand NP-hardness, implement exact methods that fit the syllabus boundary, and explain tractability versus intractability with actual code, outputs, and visual explanation."
 
 "The only remaining gap right now is implementation completeness: Set Cover is already fully demonstrated, while TSP and Knapsack still need to complete their backend and frontend visualization phases to fully match the final project outcome."

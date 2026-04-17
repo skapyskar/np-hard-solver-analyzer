@@ -2,7 +2,7 @@ const problemConfigs = {
   setcover: {
     label: "Set Cover",
     summary:
-      "Fill the subset-vs-universe table directly. Each row is a subset, each column is a universe element, and the frontend can play greedy or exact selection step by step.",
+      "Fill the subset-vs-universe table directly. Each row is a subset, each column is a universe element, and the frontend can compare exact search with greedy approximation step by step.",
     algorithms: [
       {
         key: "greedy",
@@ -47,15 +47,15 @@ const problemConfigs = {
   tsp: {
     label: "TSP",
     summary:
-      "Edit the full distance matrix as a table. Visualization is scaffolded but still needs the TSP owner to connect route-by-route playback and the final pinned result.",
+      "Edit the full distance matrix as a table. The project should show exact search for small inputs and an approximation or heuristic path for larger exploration.",
     algorithms: [
+      {
+        key: "exhaustive-search",
+        label: "Exhaustive Search",
+      },
       {
         key: "nearest-neighbor",
         label: "Nearest Neighbor",
-      },
-      {
-        key: "exact-dp",
-        label: "Exact DP",
       },
     ],
     presets: {

@@ -17,7 +17,7 @@ def run_setcover(instance_path, make_plot=False, plot_path=None):
     universe, subsets = load_setcover_instance(instance_path)
     exact_result = solve_exact(universe, subsets)
     approx_result = solve_approx(universe, subsets)
-    analysis_result = analyze(exact_result, approx_result)
+    analysis_result = analyze(exact_result, approx_result, universe, subsets)
 
     result = {
         "problem": "setcover",

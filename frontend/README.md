@@ -23,6 +23,16 @@ frontend/
 - Full step-by-step visualization is implemented for Set Cover only in this phase.
 - TSP and Knapsack already use the same frontend structure, but their visualization stages are placeholders until their owners complete them.
 
+## Syllabus Boundary And Project Scope
+
+For the Intractability-unit portion of the project, the shared frontend should stay close to syllabus wording when presenting TSP and Set Cover. At the same time, the original project brief still asks for exact-vs-approximate comparison, so Set Cover currently demonstrates both modes in the shared frontend.
+
+- Set Cover should still explain exact subset selection clearly
+- TSP should still explain exhaustive search clearly
+- Project-level exact vs approximation comparison is allowed where needed to satisfy the original NP-AA brief
+
+Knapsack is being tracked separately from this strict boundary.
+
 ## How To Run
 
 Open [index.html](/home/skapyskar/Documents/np-hard-solver-analyzer/frontend/index.html) in a browser.
@@ -54,5 +64,5 @@ Completed for:
 - Set Cover
 
 Still required from the problem owners:
-- TSP owner must implement step visualization and persistent final output for TSP.
+- TSP owner must implement visualization and persistent final output for TSP.
 - Knapsack owner must implement step visualization and persistent final output for Knapsack.

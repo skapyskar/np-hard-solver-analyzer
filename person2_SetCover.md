@@ -75,19 +75,18 @@ Implements exact Set Cover using backtracking and returns:
 }
 ```
 
-### `approx.py`
-
-Implements greedy Set Cover by repeatedly choosing the subset that covers the most uncovered elements.
-
 ### `analysis.py`
 
-Computes:
+Reports comparison metadata such as:
 
-```python
-len(approx_solution) / len(exact_solution)
-```
+- exact and approximate costs
+- exact and approximate runtimes
+- approximation ratio
+- project wording plus syllabus-facing problem phrasing
 
-and returns runtime and cost comparison data.
+### `approx.py`
+
+Implements the greedy Set Cover approximation used for the project-level exact-vs-approximate comparison.
 
 ### `visualize.py`
 
@@ -124,7 +123,7 @@ Flow:
 
 ## Standard Output Format
 
-Every solver must return:
+The exact solver must return:
 
 ```python
 {
@@ -138,13 +137,35 @@ For Set Cover:
 - `solution` = indices of chosen subsets
 - `cost` = number of subsets chosen
 
+## Syllabus Boundary And Project Requirement
+
+For Set Cover, stay strictly within the Intractability-unit wording:
+
+- exact subset selection
+- exponential search / subset selection phrasing
+- reduction-based understanding such as `Vertex Cover ≤p Set Cover`
+- decision form: can all elements be covered using at most `k` subsets
+
+At the same time, the original NP-AA brief asks for exact-vs-approximate comparison. So when you extend Set Cover:
+
+- keep the syllabus wording in explanations
+- keep the exact solver as the primary theory-facing method
+- you may keep the greedy approximation in the project comparison flow
+
+Do not let the project wording replace the syllabus-facing explanation.
+
+Do not add:
+
+- non-syllabus heuristics
+
 ## What To Keep Doing
 
 If you extend the Set Cover part later, keep the same structure and only add to it cleanly. Examples:
 
 - more sample datasets in `data/person2_setcover/`
 - a better visualization layout
-- auto-switching between exact and approximation based on size
+- richer exact-vs-approx comparison views
+- richer exact-search playback states
 - richer CLI options in `main.py`
 - richer frontend playback states in `frontend/app.js`
 
