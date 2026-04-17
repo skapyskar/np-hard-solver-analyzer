@@ -12,6 +12,13 @@ from people.person2_setcover.setcover import (
     visualize,
 )
 
+from people.person1_tsp.tsp import (
+    load_instance as load_tsp_instance,
+    solve_exact as solve_tsp_exact,
+    solve_approx as solve_tsp_approx,
+    analyze as analyze_tsp,
+    visualize as visualize_tsp,
+)
 
 def run_setcover(instance_path, make_plot=False, plot_path=None):
     universe, subsets = load_setcover_instance(instance_path)
@@ -45,6 +52,33 @@ def run_setcover(instance_path, make_plot=False, plot_path=None):
     return result
 
 
+
+def run_tsp(instance_path, make_plot=False, plot_path=None):
+    dist = load_tsp_instance(instance_path)
+
+    exact_result = solve_tsp_exact(dist)
+    approx_result = solve_tsp_approx(dist)
+    analysis_result = analyze_tsp(exact_result, dist, approx_result)
+
+    result = {
+        "problem": "tsp",
+        "input_file": str(instance_path),
+        "exact": exact_result,
+        "approx": approx_result,
+        "analysis": analysis_result,
+    }
+
+    if make_plot:
+        output_target = plot_path or "outputs/tsp_visualization.png"
+        visualize_tsp(dist, exact_result["solution"], output_target)
+
+        result["visualization"] = {
+            "status": "generated",
+            "output": output_target,
+        }
+
+    return result
+
 def build_parser():
     parser = argparse.ArgumentParser(description="NP-Hard Problem Solver & Approximation Analyzer")
     subparsers = parser.add_subparsers(dest="problem", required=True)
@@ -64,6 +98,23 @@ def build_parser():
         "--plot-output",
         help="Optional output image path for the visualization",
     )
+
+    tsp_parser = subparsers.add_parser("tsp", help="Run TSP pipeline")
+    tsp_parser.add_argument(
+        "--input",
+        default="data/person1_tsp/sample.json"
+    )
+
+    tsp_parser.add_argument(
+        "--visualize",
+        action="store_true"
+    )
+
+    tsp_parser.add_argument(
+        "--plot-output"
+    )
+
+
     return parser
 
 
@@ -73,6 +124,14 @@ def main():
 
     if args.problem == "setcover":
         result = run_setcover(
+            Path(args.input),
+            make_plot=args.visualize,
+            plot_path=args.plot_output,
+        )
+        print(json.dumps(result, indent=2))
+
+    if args.problem == "tsp":
+        result = run_tsp(
             Path(args.input),
             make_plot=args.visualize,
             plot_path=args.plot_output,
